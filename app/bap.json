@@ -1,0 +1,13 @@
+{
+    "ecom": {
+        type2: "namespace",
+        properties: {
+            "Customer": {
+                type: "entity",
+                properties: {
+                    "code": "str"
+                }
+            }
+        }
+    }
+}

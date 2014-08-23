@@ -6,22 +6,26 @@ function include(path) {
 };
 
 this.sourceRoot = function(){
-	return "templates";
+	return "./templates";
 };
 
 this.bapFile = process.argv[2];
 
+var bapCompiler = require(this.sourceRoot() + '/bap/BapCompiler')
 
-include(this.sourceRoot() + '/art/ArtCompiler.js');
-include(this.sourceRoot() + '/art/date.js');
-include(this.sourceRoot() + '/art/entity.js');
-include(this.sourceRoot() + '/art/EntityProperty.js');
-include(this.sourceRoot() + '/art/list.js');
-include(this.sourceRoot() + '/art/num.js');
-include(this.sourceRoot() + '/art/obj.js');
-include(this.sourceRoot() + '/art/str.js');
+//include(this.sourceRoot() + '/bap/BapCompiler.js');
+//include(this.sourceRoot() + '/bap/date.js');
+//include(this.sourceRoot() + '/bap/entity.js');
+//include(this.sourceRoot() + '/bap/EntityProperty.js');
+//include(this.sourceRoot() + '/bap/list.js');
+//include(this.sourceRoot() + '/bap/num.js');
+//include(this.sourceRoot() + '/bap/obj.js');
+//include(this.sourceRoot() + '/bap/str.js');
 
 
-var art = fs.readFileSync(this.bapFile, 'utf-8');
-var artCompiler = new ArtCompiler(art);
-artCompiler.compile();
+var bap = fs.readFileSync(this.bapFile, 'utf-8');
+bapCompiler.setSource(bap);
+var result = bapCompiler.compile();
+for(output in result.output){
+    console.log(result.output[output].toString());
+}

@@ -50,28 +50,28 @@ var Test4Generator = yeoman.generators.Base.extend({
 		},
 
 		art: function () {
-			include(this.sourceRoot() + '/art/ArtCompiler.js');
-			include(this.sourceRoot() + '/art/date.js');
-			include(this.sourceRoot() + '/art/entity.js');
-			include(this.sourceRoot() + '/art/EntityProperty.js');
-			include(this.sourceRoot() + '/art/list.js');
-			include(this.sourceRoot() + '/art/num.js');
-			include(this.sourceRoot() + '/art/obj.js');
-			include(this.sourceRoot() + '/art/str.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
-//			include(this.sourceRoot() + '/art/.js');
+			include(this.sourceRoot() + '/bap/BapCompiler.js');
+			include(this.sourceRoot() + '/bap/date.js');
+			include(this.sourceRoot() + '/bap/entity.js');
+			include(this.sourceRoot() + '/bap/EntityProperty.js');
+			include(this.sourceRoot() + '/bap/list.js');
+			include(this.sourceRoot() + '/bap/num.js');
+			include(this.sourceRoot() + '/bap/obj.js');
+			include(this.sourceRoot() + '/bap/str.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
+//			include(this.sourceRoot() + '/bap/.js');
 
 			var art = fs.readFileSync("ecom.art.json", 'utf-8');
 			var artCompiler = new ArtCompiler(art);
