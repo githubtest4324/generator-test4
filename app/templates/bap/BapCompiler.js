@@ -7,6 +7,25 @@ var Compiler = require('./compiler/Compiler');
 var EntityFactory = require('./typeFactories/EntityFactory.js');
 var NamespaceFactory = require('./typeFactories/NamespaceFactory.js');
 
+// Utils
+var jsType = require('./utils/JsType')
+
+
+Object.defineProperty(Object.prototype, 'has', {
+	enumerable: false,
+	value: function (property) {
+		return (this.hasOwnProperty(property));
+	}
+});
+
+Object.defineProperty(Object.prototype, 'typeOf', {
+	enumerable: false,
+	value: function (property) {
+		return jsType.get(this);
+	}
+});
+
+
 
 module.exports = function (source) {
 

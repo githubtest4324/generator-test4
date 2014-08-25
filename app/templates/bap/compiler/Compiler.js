@@ -15,26 +15,14 @@ module.exports = function Compiler(sourceParam, resultParam, factoriesParam, log
 	 */
 	this.compile = function (path) {
 		for (var val in this.source) {
-			if (this.source[val].hasOwnProperty('type')) {
+			if (this.source[val].has('type')) {
 				var factory = this.factories[this.source[val].type];
 				factory.compile(this.source, this.result, path, val, this.source[val], this);
 			} else{
-				result.output.push(new BapError("Type is not defined", path+'/'+val));
-				logger.log();
+				this.result.output.push(new BapError("Type is not defined", path+(path?'.':'')+val));
 			}
 		}
 	};
-
-
-	/**
-	 * Returns the javascript type of an object.
-	 * @param obj
-	 * @returns {string}
-	 */
-	this.jsType = function (obj) {
-		return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
-	};
-
 
 	this.getCompiledElement = function(path){
 		return this._getElement(this.result.compiled, path);

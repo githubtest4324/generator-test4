@@ -1,27 +1,29 @@
+var jsType = require('./templates/bap/utils/JsType')
+
+Object.defineProperty(Object.prototype, 'has', {
+	enumerable: false,
+	value: function (property) {
+		return (this.hasOwnProperty(property));
+	}
+});
+
+Object.defineProperty(Object.prototype, 'typeOf', {
+	enumerable: false,
+	value: function (property) {
+		return jsType.get(this);
+	}
+});
+
 var a = {
-	x: 'y',
+	x: [],
+	y: 2,
 	z: {
 		t: 'f'
+	},
+	f: function () {
+
 	}
 };
 
 
-var getElement = function(tree, path){
-	if(!path){
-		return tree;
-	}
-
-	var names = path.split('.');
-	var currentObj = tree;
-	names.forEach(function(element, index, array){
-		if(currentObj == null){
-			currentObj = tree[element];
-		} else{
-			currentObj = currentObj[element];
-		}
-	});
-	return currentObj;
-};
-
-
-console.log(getElement(a, 'x'));
+console.log(Object.prototype.typeOf());
