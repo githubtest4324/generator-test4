@@ -1,10 +1,10 @@
 {
     "ecom": {
-        type2: "namespace",
-        properties: {
+        "type": "namespace",
+        "properties": {
             "Customer": {
-                type: "entity",
-                properties: {
+                "type": "entity",
+                "properties": {
                     "code": "str"
                 }
             }

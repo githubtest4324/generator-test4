@@ -5,6 +5,7 @@ var Compiler = require('./compiler/Compiler');
 
 // Type factories
 var EntityFactory = require('./typeFactories/EntityFactory.js');
+var NamespaceFactory = require('./typeFactories/NamespaceFactory.js');
 
 
 module.exports = function (source) {
@@ -32,8 +33,8 @@ module.exports = function (source) {
         if (this._source == null) {
             result.output.push(new BapError("Source json is not specified.", null));
         }
-		var compiler = new Compiler();
-        compiler.compile(this._source, result, "", this._factories);
+		var compiler = new Compiler(this._source,  result, this._factories, this._logger);
+        compiler.compile("");
         return result;
     };
 
@@ -51,6 +52,7 @@ module.exports = function (source) {
 	/////////////////////////////////
 	// Build default list of factories
 	this.addTypeFactory(new EntityFactory());
+	this.addTypeFactory(new NamespaceFactory());
 
 
 };
