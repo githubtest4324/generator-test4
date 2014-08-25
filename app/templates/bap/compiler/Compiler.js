@@ -39,7 +39,7 @@ module.exports = function Compiler(sourceParam, resultParam, factoriesParam, log
 		var names = path.split('.');
 		var currentObj = tree;
 		names.forEach(function(element, index, array){
-			if(currentObj == null){
+			if(currentObj === null){
 				currentObj = tree[element];
 			} else{
 				currentObj = currentObj[element];
@@ -48,4 +48,4 @@ module.exports = function Compiler(sourceParam, resultParam, factoriesParam, log
 		return currentObj;
 	};
 
-}
+};

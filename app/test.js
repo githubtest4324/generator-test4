@@ -26,4 +26,4 @@ var a = {
 };
 
 
-console.log(Object.prototype.typeOf());
+console.log(a.typeOf());

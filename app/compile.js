@@ -1,25 +1,24 @@
 var fs = require('fs');
 var vm = require('vm');
+
 function include(path) {
 	var code = fs.readFileSync(path, 'utf-8');
 	vm.runInThisContext(code, path);
-};
+}
 
-this.sourceRoot = function(){
-	return "./templates";
-};
+var sourceRoot = "./templates";
 
-this.bapFile = process.argv[2];
+var bapFile = process.argv[2];
 
-var BapCompiler = require(this.sourceRoot() + '/bap/BapCompiler')
+var BapCompiler = require(sourceRoot + '/bap/BapCompiler');
 
-var bap = fs.readFileSync(this.bapFile, 'utf-8');
+var bap = fs.readFileSync(bapFile, 'utf-8');
 var compiler = new BapCompiler(bap);
 var result = compiler.compile();
-if(result.output.length>0){
-	for(output in result.output){
+if (result.output.length > 0) {
+	for (var output in result.output) {
 		console.log(result.output[output].toString());
 	}
-};
+}
 
 console.log(result.compiled);

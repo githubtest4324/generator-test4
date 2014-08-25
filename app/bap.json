@@ -1,6 +1,6 @@
 {
     "ecom": {
-        "type2": "namespace",
+        "type": "namespace",
         "properties": {
             "Customer": {
                 "type": "entity",
