@@ -9,21 +9,13 @@ var NamespaceFactory = require('./typeFactories/NamespaceFactory.js');
 
 // Utils
 var jsType = require('./utils/JsType')
+var stringUtils = require('./utils/StringUtils')
 
 
-Object.defineProperty(Object.prototype, 'has', {
-	enumerable: false,
-	value: function (property) {
-		return (this.hasOwnProperty(property));
-	}
-});
-
-Object.defineProperty(Object.prototype, 'typeOf', {
-	enumerable: false,
-	value: function (property) {
-		return jsType.get(this);
-	}
-});
+// Install prototype methods
+jsType.installPrototypeHas();
+jsType.installPrototypeTypeOf();
+stringUtils.installPrototypeFormat();
 
 
 

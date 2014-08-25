@@ -1,4 +1,5 @@
-module.exports = {
+
+var internalJsType = {
 	STRING: 'string',
 	ARRAY: 'array',
 	OBJECT: 'object',
@@ -10,7 +11,26 @@ module.exports = {
 	 * @returns {string}
 	 */
 	get: function (obj) {
-		return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase()
+		return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
+	},
+	
+	installPrototypeHas: function(){
+		Object.defineProperty(Object.prototype, 'has', {
+			enumerable: false,
+			value: function (property) {
+				return (this.hasOwnProperty(property));
+			}
+		});
+	},
+	installPrototypeTypeOf: function(){
+		Object.defineProperty(Object.prototype, 'typeOf', {
+			enumerable: false,
+			value: function (property) {
+				return internalJsType.get(this);
+			}
+		});
 	}
 
-}
+};
+
+module.exports = internalJsType;

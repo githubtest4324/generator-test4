@@ -1,18 +1,9 @@
 var jsType = require('./templates/bap/utils/JsType')
+ var stringUtils = require('./templates/bap/utils/StringUtils')
 
-Object.defineProperty(Object.prototype, 'has', {
-	enumerable: false,
-	value: function (property) {
-		return (this.hasOwnProperty(property));
-	}
-});
 
-Object.defineProperty(Object.prototype, 'typeOf', {
-	enumerable: false,
-	value: function (property) {
-		return jsType.get(this);
-	}
-});
+
+stringUtils.installPrototypeFormat();
 
 var a = {
 	x: [],
@@ -26,4 +17,4 @@ var a = {
 };
 
 
-console.log(a.typeOf());
+console.log("{0}".format('liviu'));
