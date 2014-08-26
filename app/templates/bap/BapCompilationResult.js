@@ -9,5 +9,17 @@ module.exports = function BapCompilationResult() {
      */
     this.output = [];
 
+    this.toString = function(){
+        return JSON.stringify(this.compiled, function(key, value){
+        	if(key=='$parent'){
+        		if(value.has('toString')){
+        			return value.toString();
+        		}
+        		return 'Circular';
+        	} else{
+        		return value;
+        	}
+        }, 4);      
+    };
 };
 

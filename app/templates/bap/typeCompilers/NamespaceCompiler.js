@@ -12,23 +12,23 @@ module.exports ={
 			
 			// Build namespace element
 			var res = new Namespace();
-			res.name = name;
-			parent[name] = res;
-			if(parent.has('type') && parent.type===Namespace.type){
+			res.$name = name;
+			res.$parent = parent;
+			if(parent.has('$type') && parent.$type===this.type){
 				// Has namespace parent
-				res.namespace = "{0}.{1}".format(parent.namespace, name);
+				res.$namespace = "{0}.{1}".format(parent.$namespace, name);
 			} else{
 				// Has root parent
-				res.namespace = name;
+				res.$namespace = name;
 			}
+			parent[name] = res;
 	
 			// Compile children
 			for(var childName in value){
 				var child = value[childName];
 				if (!value[childName].has('type')) {
 					// Namespace
-					var namespaceFactory = this.compiler.compilers[this.type];
-					namespaceFactory.compile('', childName, child, res);
+					this.compile('', childName, child, res);
 				} else{
 					// Other element
 					// var factory = this.compiler.compilers[child.type];

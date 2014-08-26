@@ -17,9 +17,9 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 	 */
 	this.compile = function () {
 		var defaultNamespace = new Namespace();
-		defaultNamespace.isDefault = true;
-		defaultNamespace.namespace = '';
-		defaultNamespace.name = '';
+		defaultNamespace.$isDefault = true;
+		defaultNamespace.$namespace = '';
+		defaultNamespace.$name = '';
 		this.result[''] = defaultNamespace;
 
 		// Build default list of compilers
