@@ -2,6 +2,7 @@ var BapError = require('../BapError');
 var BapWarning = require('../BapWarning');
 var Namespace = require('../types/Namespace');
 var NamespaceCompiler = require('../typeCompilers/NamespaceCompiler.js');
+var EntityCompiler = require('../typeCompilers/EntityCompiler.js');
 
 module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 	this.compilers = {};
@@ -24,6 +25,7 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 
 		// Build default list of compilers
 		this.compilers[NamespaceCompiler.type] = new NamespaceCompiler.compiler(this);
+		this.compilers[EntityCompiler.type] = new EntityCompiler.compiler(this);
 
 		this._validateTopLevelElements();
 

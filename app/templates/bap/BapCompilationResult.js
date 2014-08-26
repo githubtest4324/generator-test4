@@ -2,7 +2,11 @@ module.exports = function BapCompilationResult() {
     /**
      * Compiled Bap object.
      */
-    this.compiled = {};
+    this.compiled = {
+        toString : function(){
+            return 'root';
+        }
+    };
     /**
      * List of BapWarning or BapError objects.
      * @type {Array}
@@ -14,8 +18,9 @@ module.exports = function BapCompilationResult() {
         	if(key=='$parent'){
         		if(value.has('toString')){
         			return value.toString();
+        		} else{
+        		    return 'Circular reference'
         		}
-        		return 'Circular';
         	} else{
         		return value;
         	}

@@ -18,7 +18,15 @@
             "City": {
                 "type": "entity",
                 "properties": {
-                    "name": "str"
+                    "name": "str",
+                    "code": {
+                        "type": "str",
+                        "translate": "code2"
+                    },
+                    "zipCodes": {
+                        "type": "list",
+                        "itemType": "str"
+                    }
                 },
             }
         }

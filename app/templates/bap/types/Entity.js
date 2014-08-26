@@ -1,4 +1,9 @@
-function entity(){
+module.exports = function(){
+	this.$type = 'entity';
 	this.$name = null;
-	this.$namespace = null;
+	this.$parent = null;
+	
+	this.getNamespace = function(){
+		return this.$parent.$namespace;
+	};
 }

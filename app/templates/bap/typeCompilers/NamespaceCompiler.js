@@ -12,6 +12,7 @@ module.exports ={
 			
 			// Build namespace element
 			var res = new Namespace();
+			parent[name] = res;
 			res.$name = name;
 			res.$parent = parent;
 			if(parent.has('$type') && parent.$type===this.type){
@@ -21,7 +22,6 @@ module.exports ={
 				// Has root parent
 				res.$namespace = name;
 			}
-			parent[name] = res;
 	
 			// Compile children
 			for(var childName in value){
@@ -31,8 +31,8 @@ module.exports ={
 					this.compile('', childName, child, res);
 				} else{
 					// Other element
-					// var factory = this.compiler.compilers[child.type];
-					// factory.compile('{0}.{1}'.format(sourcePath, name), childName, child, res);
+					var compiler = this.compiler.compilers[child.type];
+					compiler.compile('{0}.{1}'.format(sourcePath, name), childName, child, res);
 				}			
 			}
 		};
