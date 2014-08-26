@@ -21,4 +21,4 @@ if (result.output.length > 0) {
 	}
 }
 
-console.log(result.compiled);
+console.log(JSON.stringify(result.compiled, null, 4));

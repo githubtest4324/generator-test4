@@ -3,10 +3,6 @@ var BapError = require('./BapError');
 var BapWarning = require('./BapWarning');
 var Compiler = require('./compiler/Compiler');
 
-// Type factories
-var EntityFactory = require('./typeFactories/EntityFactory.js');
-var NamespaceFactory = require('./typeFactories/NamespaceFactory.js');
-
 // Utils
 var jsType = require('./utils/JsType')
 var stringUtils = require('./utils/StringUtils')
@@ -31,9 +27,6 @@ module.exports = function (source) {
     this.setLogger = function (logger) {
         this._logger = logger;
     };
-	this.addTypeFactory = function(factory){
-		this._factories[factory.type] = factory;
-	};
 
 	/**
 	 * Transforms source into compiled form.
@@ -41,11 +34,11 @@ module.exports = function (source) {
 	 */
     this.compile = function () {
         var result = new BapCompilationResult();
-        if (this._source == null) {
+        if (this._source === null) {
             result.output.push(new BapError("Source json is not specified.", null));
         }
 		var compiler = new Compiler(this._source,  result, this._factories, this._logger);
-        compiler.compile("");
+        compiler.compile();
         return result;
     };
 
@@ -61,9 +54,6 @@ module.exports = function (source) {
 	/////////////////////////////////
 	// Constructor
 	/////////////////////////////////
-	// Build default list of factories
-	this.addTypeFactory(new EntityFactory());
-	this.addTypeFactory(new NamespaceFactory());
 
 
 };

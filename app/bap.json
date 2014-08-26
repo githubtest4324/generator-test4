@@ -1,12 +1,25 @@
 {
     "ecom": {
-        "type": "namespace",
-        "properties": {
+        "customers": {
             "Customer": {
                 "type": "entity",
                 "properties": {
                     "code": "str"
                 }
+            }
+        },
+        "regional": {
+            "Country": {
+                "type": "entity",
+                "properties": {
+                    "name": "str"
+                }
+            },
+            "City": {
+                "type": "entity",
+                "properties": {
+                    "name": "str"
+                },
             }
         }
     }

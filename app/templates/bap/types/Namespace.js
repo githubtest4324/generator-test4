@@ -1,9 +1,13 @@
 module.exports = function(){
 	this.type = 'namespace';
-	this.name = null;
-	this.namespace = null;
+	this.isDefault = false;
 	/**
-	 * Array of Entity, WebService, Page objects.
+	 * Fully qualified namespace name.
 	 */
-	this.properties = [];
+	this.namespace = null;
+	
+	/**
+	 * Only the name part of the namespace.
+	 */
+	this.name = null;
 }
