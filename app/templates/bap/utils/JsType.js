@@ -4,6 +4,7 @@ var internalJsType = {
 	ARRAY: 'array',
 	OBJECT: 'object',
 	FUNCTION: 'function',
+	UNDEFINED:'undefined',
 	NUMBER:'number',
 	/**
 	 * Returns the javascript type of an object.

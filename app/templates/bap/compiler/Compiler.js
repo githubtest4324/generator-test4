@@ -3,6 +3,7 @@ var BapWarning = require('../BapWarning');
 var Namespace = require('../types/Namespace');
 var NamespaceCompiler = require('../typeCompilers/NamespaceCompiler.js');
 var EntityCompiler = require('../typeCompilers/EntityCompiler.js');
+var JsType = require('../utils/JsType.js');
 
 module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 	this.compilers = {};
@@ -21,7 +22,7 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 		defaultNamespace.$isDefault = true;
 		defaultNamespace.$namespace = '';
 		defaultNamespace.$name = '';
-		this.result[''] = defaultNamespace;
+		defaultNamespace.$parent = this.result.compiled;
 
 		// Build default list of compilers
 		this.compilers[NamespaceCompiler.type] = new NamespaceCompiler.compiler(this);
@@ -29,6 +30,7 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 
 		this._validateTopLevelElements();
 
+		var usesDefaultNamespace = false;
 		for (var name in this.source) {
 			if (!this.source[name].has('type')) {
 				// Namespace
@@ -38,22 +40,45 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 				// Other element
 				var factory = this.compilers[this.source[name].type];
 				factory.compile('', name, this.source[name], defaultNamespace);
+				usesDefaultNamespace = true;
 			}
+		}
+		
+		if(usesDefaultNamespace){
+			this.result.compiled['defaultNamespace'] = defaultNamespace;
 		}
 	};
 
-	/**
-	 * Allowed top level elements: namespaces, entities, webservices, pages
-	 */
 	this._validateTopLevelElements = function(){
-		// todo
-		// for (var val in value) {
-			// if (value[val].has('type')) {
-			// 	var factory = this.compilers[value[val].type];
-			// 	factory.compile(value, this.result, path, val, value[val], this);
-			// } else{
-			// 	this.result.output.push(new BapError("Type is not defined", path+(path?'.':'')+val));
-			// }
+		var root = this.source;
+		var output = this.result.output;
+
+		if(!root){
+			output.push(new BapError('', 'No content was received to be compiled'));
+		}
+		
+
+		// Must be an object
+		if(root.typeOf()!=JsType.OBJECT){
+			output.push(new BapError('', 'Received source content must be a complex json object. The one received is of type "{0}"'.format(root.typeOf())));
+		}
+		
+		// 'type' not allowed as root element.
+		if(root.has('type')){
+			output.push(new BapError('', '"type" is not allowed as top level element'));
+		}
+		
+		// May contain only 'entity', 'page', 'webService' or no types
+		this.allowed(root, [EntityCompiler.type, NamespaceCompiler.type]);
+		
+	};
+	
+	/**
+	 * Returns true if 'element' contains only properties with given 'types'
+	 */
+	this.allowed = function(element, types){
+		// for(property in element){
+		// 	if()
 		// }
 	};
 	

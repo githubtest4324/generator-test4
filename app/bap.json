@@ -30,5 +30,16 @@
                 },
             }
         }
+    },
+    "Request": {
+        "type": "entity",
+        "properties": {
+            "name": "str",
+            "code": {
+                "type": "str",
+                "translate": "code2"
+            },
+            "customer": "Customer"
+        }
     }
 }

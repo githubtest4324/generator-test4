@@ -1,4 +1,4 @@
-module.exports = function BapError(messageParam, pathParam){
+module.exports = function BapError(pathParam, messageParam){
     this.type = 'error';
     this.message = messageParam;
     this.path = pathParam;
