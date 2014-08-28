@@ -4,6 +4,7 @@ var Namespace = require('../types/Namespace');
 var NamespaceCompiler = require('../typeCompilers/NamespaceCompiler.js');
 var EntityCompiler = require('../typeCompilers/EntityCompiler.js');
 var JsType = require('../utils/JsType.js');
+var JsonEasyFilter = require('../utils/JsonEasyFilter');
 
 module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 	this.compilers = {};
@@ -39,8 +40,12 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 			} else{
 				// Other element
 				var factory = this.compilers[this.source[name].type];
-				factory.compile('', name, this.source[name], defaultNamespace);
-				usesDefaultNamespace = true;
+				if(factory){
+					factory.compile('', name, this.source[name], defaultNamespace);
+					usesDefaultNamespace = true;
+				} else{
+					this.result.output.push(new BapError(name, 'Unknown type "{0}"'.format(this.source[name].type)));
+				}
 			}
 		}
 		
@@ -68,18 +73,31 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 			output.push(new BapError('', '"type" is not allowed as top level element'));
 		}
 		
-		// May contain only 'entity', 'page', 'webService' or no types
-		this.allowed(root, [EntityCompiler.type, NamespaceCompiler.type]);
+		// May contain only 
+		this._allowedTypes(root);
 		
 	};
 	
 	/**
-	 * Returns true if 'element' contains only properties with given 'types'
+	 * Returns true if 'root' contains only properties with 'entity', 'page', 'webService' or no types.
 	 */
-	this.allowed = function(element, types){
-		// for(property in element){
-		// 	if()
-		// }
+	this._allowedTypes = function(root){
+		var isAllowed = true;
+		var wrongNodes = [];
+		JsonEasyFilter.filter(root, function(node){
+			if(node.level==1){
+				if(! (!node.type || node.type===EntityCompiler.type)){
+					isAllowed = false;
+					wrongNodes.push({node: node, type: node.type});
+				}
+			}
+		});
+		var output = this.result;
+		if(!isAllowed){
+			wrongNodes.forEach(function(node){
+				output.push(new BapError(node.node.getPathStr(), "Type '{0}' not allowed under root element. It will be ignored."));
+			});
+		}
 	};
 	
 	this.getCompiledElement = function(path){

@@ -1,4 +1,5 @@
 {
+    "type": "aab",
     "ecom": {
         "customers": {
             "Customer": {
@@ -41,5 +42,8 @@
             },
             "customer": "Customer"
         }
+    },
+    "aaa": {
+        "type": "bbb"
     }
 }

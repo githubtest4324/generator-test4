@@ -8,7 +8,9 @@ module.exports ={
 		this.compiler = compilerParam;
 	
 		this.compile = function(sourcePath, name, value, parent){
-			this._validate(sourcePath, name, value, parent);
+			if(!this._validate(sourcePath, name, value, parent)){
+				return;
+			}
 			
 			// Build namespace element
 			var res = new Namespace();
@@ -37,8 +39,10 @@ module.exports ={
 			}
 		};
 	
-		this._validate = function (source, result, path, element, compiler) {
+		this._validate = function (sourcePath, name, value, parent) {
 			
+			// Namespace has to be an object
+			if(value.typeOf()!==JsType.)
 			// todo
 			
 			// if(path){

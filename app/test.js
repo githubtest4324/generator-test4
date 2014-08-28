@@ -1,41 +1,13 @@
-
-	var jsType = require('./templates/bap/utils/JsType')
-	var stringUtils = require('./templates/bap/utils/StringUtils')
-
-
-
-stringUtils.installPrototypeFormat();
-
-var getElement = function(tree, path){
-		if(!path){
-			return tree;
-		}
-
-		var names = path.split('.');
-		var currentObj = tree;
-		names.forEach(function(element, index, array){
-			if(currentObj === null){
-				currentObj = tree[element];
-			} else{
-				currentObj = currentObj[element];
-			}
-		});
-		return currentObj;
-	};
+var jsType = require('./templates/bap/utils/JsType')
+var stringUtils = require('./templates/bap/utils/StringUtils')
+var traverse = require('traverse');
+var fs = require("fs");
+var content = fs.readFileSync('./bap.json');
 
 
-var a = {
-	x: [],
-	y: 2,
-	z: {
-		t: 'f'
-	},
-	f: function () {
+var obj = eval('(' + content + ')');
+traverse(obj).forEach(function(x){
+	console.log(this.isRoot);	
+});
 
-	}
-};
-
-
-console.log("{0}".format('liviu'));
-
-
+// console.log(obj);

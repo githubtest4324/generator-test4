@@ -15,11 +15,14 @@ var BapCompiler = require(sourceRoot + '/bap/BapCompiler');
 var bap = fs.readFileSync(bapFile, 'utf-8');
 var compiler = new BapCompiler(bap);
 var result = compiler.compile();
+
+console.log(result.toString());
+
 if (result.output.length > 0) {
-	for (var output in result.output) {
-		console.log(result.output[output].toString());
-	}
+	result.output.forEach(function(val){
+		console.log(val.toString());
+	});
 }
 
 
-console.log(result.toString());
+
