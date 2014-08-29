@@ -92,22 +92,19 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 	 */
 	this._allowedTypes = function(root){
 		var isAllowed = true;
-		var wrongNodes = [];
+		var output = this.result.output;
 		JsonEasyFilter.filter(root, function(node){
 			if(node.level==1){
-				if(! (!node.value.type || node.value.type===EntityCompiler.type)){
+				if(node.value.typeOf()!==JsType.OBJECT){
 					isAllowed = false;
-					wrongNodes.push({node: node, type: node.value.type});
+					output.push(new BapError(node.getPathStr(), "Only objects allowed as top level elements.".format(node.value.type)));
+				} else 	if(! (!node.value.type || node.value.type===EntityCompiler.type)){
+					isAllowed = false;
+					output.push(new BapError(node.getPathStr(), "Type '{0}' not allowed for a top level element.".format(node.value.type)));
 				}
 			}
 		});
-		var output = this.result.output;
-		if(!isAllowed){
-			wrongNodes.forEach(function(wn){
-				output.push(new BapError(wn.node.getPathStr(), "Type '{0}' not allowed for a top level element".format(wn.type)));
-			});
-		}
-		
+
 		return isAllowed;
 	};
 	
