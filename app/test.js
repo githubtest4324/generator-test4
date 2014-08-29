@@ -1,14 +1,11 @@
-var jsType = require('./templates/bap/utils/JsType')
-var stringUtils = require('./templates/bap/utils/StringUtils')
-var traverse = require('traverse');
-var fs = require("fs");
-var content = fs.readFileSync('./bap.json');
 
 
-// var obj = eval('(' + content + ')');
-var obj = JSON.parse(content);
-// traverse(obj).forEach(function(x){
-// 	console.log(this.isRoot);	
-// });
+var x = {
+	a: {
+		b: 'c'
+	},
+	x: this
+};
 
-console.log(obj);
+
+console.log(x);

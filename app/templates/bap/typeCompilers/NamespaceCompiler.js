@@ -33,11 +33,11 @@ module.exports ={
 				var child = value[childName];
 				if (!value[childName].has('type')) {
 					// Namespace
-					this.compile('{0}.{1}'.format(sourcePath, name), childName, child, res);
+					this.compile(sourcePath.concat([childName]), childName, child, res);
 				} else{
 					// Other element
 					var compiler = this.compiler.compilers[child.type];
-					compiler.compile('{0}.{1}'.format(sourcePath, name), childName, child, res);
+					compiler.compile(sourcePath.concat([childName]), childName, child, res);
 				}			
 			}
 		};
@@ -63,10 +63,10 @@ module.exports ={
 				if(node.level==1){
 					if(node.value.typeOf()!==JsType.OBJECT){
 						isAllowed = false;
-						output.push(new BapError("{0}.{1}".format(sourcePath, node.getPathStr()), "Only objects allowed as top level elements.".format(node.value.type)));
+						output.push(new BapError(sourcePath.concat(node.path), "Only objects allowed as top level elements.".format(node.value.type)));
 					} else 	if(! (!node.value.type || node.value.type===EntityCompiler.type)){
 						isAllowed = false;
-						output.push(new BapError("{0}.{1}".format(sourcePath, node.getPathStr()), "Type '{0}' not allowed for a top level element.".format(node.value.type)));
+						output.push(new BapError(sourcePath.concat(node.path), "Type '{0}' not allowed for a top level element.".format(node.value.type)));
 					}
 				}
 			});

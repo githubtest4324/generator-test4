@@ -38,12 +38,12 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 			if (!this.source[name].has('type')) {
 				// Namespace
 				var namespaceCompiler = this.compilers[NamespaceCompiler.type];
-				namespaceCompiler.compile('', name, this.source[name], this.result.compiled);
+				namespaceCompiler.compile([name], name, this.source[name], this.result.compiled);
 			} else{
 				// Other element
 				var factory = this.compilers[this.source[name].type];
 				if(factory){
-					factory.compile('', name, this.source[name], defaultNamespace);
+					factory.compile([name], name, this.source[name], defaultNamespace);
 					usesDefaultNamespace = true;
 				} else{
 					this.result.output.push(new BapError(name, 'Unknown type "{0}"'.format(this.source[name].type)));
@@ -62,20 +62,20 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 		var output = this.result.output;
 
 		if(!root){
-			output.push(new BapError('', 'No content was received to be compiled'));
+			output.push(new BapError([], 'No content was received to be compiled'));
 			res = false;
 		}
 		
 
 		// Must be an object
 		if(root.typeOf()!=JsType.OBJECT){
-			output.push(new BapError('', 'Received source content must be a complex json object. The one received is of type "{0}"'.format(root.typeOf())));
+			output.push(new BapError([], 'Received source content must be a complex json object. The one received is of type "{0}"'.format(root.typeOf())));
 			res = false;
 		}
 		
 		// 'type' not allowed as root element.
 		if(root.has('type')){
-			output.push(new BapError('', '"type" is not allowed as top level element'));
+			output.push(new BapError([], '"type" is not allowed as top level element'));
 			res = false;
 		}
 		
@@ -97,10 +97,10 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 			if(node.level==1){
 				if(node.value.typeOf()!==JsType.OBJECT){
 					isAllowed = false;
-					output.push(new BapError(node.getPathStr(), "Only objects allowed as top level elements.".format(node.value.type)));
+					output.push(new BapError(node.path, "Only objects allowed as top level elements.".format(node.value.type)));
 				} else 	if(! (!node.value.type || node.value.type===EntityCompiler.type)){
 					isAllowed = false;
-					output.push(new BapError(node.getPathStr(), "Type '{0}' not allowed for a top level element.".format(node.value.type)));
+					output.push(new BapError(node.path, "Type '{0}' not allowed for a top level element.".format(node.value.type)));
 				}
 			}
 		});
