@@ -14,12 +14,13 @@ var JsonNode = function(){
 			delimiter = '.';
 		}
 		var res = '';
-		for(var i = 0; i<this.pathArray.length; i++){
-			if(i===0){
+		for(var i = 0; i<this.path.length; i++){
+			if(i!==0){
 				res+=delimiter;
 			}
-			res+=this.pathArray[i];
+			res+=this.path[i];
 		}
+		return res;
 	};
 };
 

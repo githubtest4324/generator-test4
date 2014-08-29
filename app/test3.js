@@ -11,5 +11,6 @@ var res = JsonEasyFilter.filter(obj, function(node, res){
 	}
 });
 
+
 console.log(res);
 

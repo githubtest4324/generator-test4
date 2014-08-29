@@ -21,7 +21,7 @@ module.exports = function (source) {
 	// Private properties
 	/////////////////////////////////
 	this._logger = console;
-	this._source = eval('(' + source + ')');
+	this._source = JSON.parse(source);
 	this._factories = {};
 
     this.setLogger = function (logger) {
@@ -45,11 +45,6 @@ module.exports = function (source) {
 	/////////////////////////////////
     // Private members
     /////////////////////////////////
-    this._logger = console;
-	this._source = eval('(' + source + ')');
-    this._log = function (message) {
-        this._logger.log(message);
-    };
 
 	/////////////////////////////////
 	// Constructor

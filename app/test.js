@@ -5,9 +5,10 @@ var fs = require("fs");
 var content = fs.readFileSync('./bap.json');
 
 
-var obj = eval('(' + content + ')');
-traverse(obj).forEach(function(x){
-	console.log(this.isRoot);	
-});
+// var obj = eval('(' + content + ')');
+var obj = JSON.parse(content);
+// traverse(obj).forEach(function(x){
+// 	console.log(this.isRoot);	
+// });
 
-// console.log(obj);
+console.log(obj);

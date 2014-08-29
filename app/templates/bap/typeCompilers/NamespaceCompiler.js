@@ -42,7 +42,7 @@ module.exports ={
 		this._validate = function (sourcePath, name, value, parent) {
 			
 			// Namespace has to be an object
-			if(value.typeOf()!==JsType.)
+			// if(value.typeOf()!==JsType.)
 			// todo
 			
 			// if(path){

@@ -29,7 +29,9 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 		this.compilers[NamespaceCompiler.type] = new NamespaceCompiler.compiler(this);
 		this.compilers[EntityCompiler.type] = new EntityCompiler.compiler(this);
 
-		this._validateTopLevelElements();
+		if(!this._validateTopLevelElements()){
+			return;
+		}
 
 		var usesDefaultNamespace = false;
 		for (var name in this.source) {
@@ -55,27 +57,34 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 	};
 
 	this._validateTopLevelElements = function(){
+		var res = true;
 		var root = this.source;
 		var output = this.result.output;
 
 		if(!root){
 			output.push(new BapError('', 'No content was received to be compiled'));
+			res = false;
 		}
 		
 
 		// Must be an object
 		if(root.typeOf()!=JsType.OBJECT){
 			output.push(new BapError('', 'Received source content must be a complex json object. The one received is of type "{0}"'.format(root.typeOf())));
+			res = false;
 		}
 		
 		// 'type' not allowed as root element.
 		if(root.has('type')){
 			output.push(new BapError('', '"type" is not allowed as top level element'));
+			res = false;
 		}
 		
 		// May contain only 
-		this._allowedTypes(root);
+		if(!this._allowedTypes(root)){
+			res = false;
+		}
 		
+		return res;
 	};
 	
 	/**
@@ -86,18 +95,20 @@ module.exports = function Compiler(sourceParam, resultParam, loggerParam){
 		var wrongNodes = [];
 		JsonEasyFilter.filter(root, function(node){
 			if(node.level==1){
-				if(! (!node.type || node.type===EntityCompiler.type)){
+				if(! (!node.value.type || node.value.type===EntityCompiler.type)){
 					isAllowed = false;
-					wrongNodes.push({node: node, type: node.type});
+					wrongNodes.push({node: node, type: node.value.type});
 				}
 			}
 		});
-		var output = this.result;
+		var output = this.result.output;
 		if(!isAllowed){
-			wrongNodes.forEach(function(node){
-				output.push(new BapError(node.node.getPathStr(), "Type '{0}' not allowed under root element. It will be ignored."));
+			wrongNodes.forEach(function(wn){
+				output.push(new BapError(wn.node.getPathStr(), "Type '{0}' not allowed for a top level element".format(wn.type)));
 			});
 		}
+		
+		return isAllowed;
 	};
 	
 	this.getCompiledElement = function(path){
