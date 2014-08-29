@@ -28,7 +28,7 @@ var JsonNode = function(){
 module.exports = {
 	
 	filter: function(obj, callback){
-		var result = {};
+		var result = [];
 		traverse(obj).forEach(function(val){
 			// console.log(val);
 			var node = new JsonNode();
@@ -37,7 +37,10 @@ module.exports = {
 			node.value = this.node;
 			node.level = this.level;
 			node.isRoot = this.isRoot;
-			callback(node, result);
+			var resCallBack = callback(node);
+			if(resCallBack){
+				result.push(resCallBack);
+			}
 		});
 		return result;
 	}
