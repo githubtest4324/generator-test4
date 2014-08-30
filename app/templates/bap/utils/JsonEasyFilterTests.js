@@ -4,15 +4,18 @@ var json = {
 	departments : {
 		admin : {
 			name : "Administrative",
-			manager : 'john'
+			manager : 'john',
+			employees : [ 'john', 'anna' ]
 		},
 		it : {
 			name : 'IT',
-			manager : 'andy'
+			manager : 'andy',
+			employees : [ 'gaby', 'john', 'boby' ]
 		},
 		finance : {
 			name : 'Financiar',
-			manager : 'anna'
+			manager : 'anna',
+			employees : [ 'andy', 'gaby', 'anna' ]
 		}
 	},
 	employees : [ {
@@ -45,24 +48,30 @@ var json = {
 		birthDate : '1993/11/20'
 	}, {
 		username : null,
-		firstName : 'Gaby',
-		lastName : 'GABY',
-		salary : 400,
+		firstName : 'Unknown',
+		lastName : 'Unknown',
+		salary : 100,
 		gender : 'M',
 		birthDate : '1993/11/20'
 	} ]
 };
 
 /**
- * Get all employee username with a salary over 200.
+ * All employee usernames.
  */
 function test1() {
 	var res = JsonEasyFilter(json).filter(function(node) {
 		if (node.hasOwnProperty('username')) {
+			console.log(node.value.username);
+			if(node.value.username===null){
+				console.log('aaa');
+			}
 			return node.value.username;
 		}
 	});
-	var testResult = res.toString() === [ 'john', 'andy', 'anna', 'gaby' ].toString();
+	 console.log(res);
+	var testResult = res.toString() === [ 'john', 'andy', 'anna', 'gaby', null ]
+			.toString();
 	return testResult;
 };
 
@@ -77,13 +86,39 @@ function test2() {
 	return testResult;
 }
 
-function runTests(){
+/**
+ * All employee usernames with a salary over 200.
+ */
+function test3() {
+	var res = JsonEasyFilter(json).filter(function(node) {
+		if (node.has('salary') && node.value.salary > 200) {
+			return node.value.username + ' ' + node.value.salary;
+		}
+	});
+	// console.log(res);
+	var testResult = res.toString() === [ 'anna 300', 'gaby 400' ].toString();
+	return testResult;
+};
+
+function runTests() {
 	var res = test1();
 	console.log('Test1: ' + res);
 	var res = test2();
 	console.log('Test2: ' + res);
+	var res = test3();
+	console.log('Test3: ' + res);
 }
 
 console.log('start');
-//test1();
-runTests();
+ test1();
+// runTests();
+
+//var x = [1, 2];
+//x.push(null);
+//console.log(x);
+
+//var res = JsonEasyFilter(json).get('employees').filter(function(node) {
+//	console.log(node.key+' '+node.value);
+//});
+//
+//console.log(res);
