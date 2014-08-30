@@ -1,5 +1,8 @@
 var traverse = require("traverse");
 
+var ROOT_KEY = '$root_4285190851';
+
+
 var _getPathStr = function(path, delimiter){
 	if(!delimiter){
 		delimiter = '.';
@@ -35,7 +38,7 @@ var JsonNode = function(){
 		} else{
 			absolutePath = this.getPathStr()+'.'+relPathStr;
 		}
-		return this._nodeHash[absolutePath];
+		return this._nodeHash[ROOT_KEY+'.'+absolutePath];
 	}
 	this.filter = function(callback){
 		var result = [];
@@ -43,7 +46,7 @@ var JsonNode = function(){
 			if(absolutePath.indexOf(this._pathStr)===0){
 				var node = this._nodeHash[absolutePath];
 				var resCallBack = callback(node);
-				if(resCallBack){
+				if(resCallBack!==undefined){
 					result.push(resCallBack);
 				}
 			}
@@ -81,45 +84,39 @@ var JsonNode = function(){
 
 
 module.exports = function(obj){
-	this._filter = function(obj, callback){
-		var result = [];
+	this._traverse = function(obj){
 		var nodeHash = {};
 		traverse(obj).forEach(function(val){
 			// console.log(val);
 			var node = new JsonNode();
 			node._nodeHash = nodeHash;
 			node.path = this.path;
-			node._pathStr = _getPathStr(node.path);
+			node._pathStr = ROOT_KEY+'.'+_getPathStr(node.path);
 			node.key = this.key;
 			node.value = this.node;
 			node.level = this.level;
 			node.isRoot = this.isRoot;
-			var resCallBack = callback(node);
 			
 			// Hash
-			nodeHash[node.getPathStr()] = node;
+			if(node.isRoot){
+				nodeHash[ROOT_KEY] = node;
+			} else{
+				nodeHash[ROOT_KEY+'.'+node.getPathStr()] = node;
+			}
 			
 			// Parent
 			var parentPath = node.path.slice(0, node.path.length - 1);
-			var parentNode = nodeHash[_getPathStr(parentPath)];
+			var parentNode = nodeHash[ROOT_KEY+'.'+_getPathStr(parentPath)];
 			if(parentNode){
 				node.parent = parentNode;
 			}
-			
-			if(resCallBack){
-				result.push(resCallBack);
-			}
 		});
-		return result;
+		return nodeHash;
 	};
 	this._build = function(obj){
-		var rootArray = this._filter(obj, function(node){
-			if(node.isRoot){
-				return node;
-			}
-		});
+		var nodeHash = this._traverse(obj);
 		
-		return rootArray[0];
+		return nodeHash[ROOT_KEY];
 	};
 	
 	return this._build(obj);

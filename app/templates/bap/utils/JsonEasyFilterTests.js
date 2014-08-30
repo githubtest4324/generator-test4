@@ -1,4 +1,4 @@
-var JsonEasyFilter = require('./JsonEasyFilter');
+var jef = require('./JsonEasyFilter');
 
 var json = {
 	departments : {
@@ -60,23 +60,19 @@ var json = {
  * All employee usernames.
  */
 function test1() {
-	var res = JsonEasyFilter(json).filter(function(node) {
+	var res = jef(json).filter(function(node) {
 		if (node.hasOwnProperty('username')) {
-			console.log(node.value.username);
-			if(node.value.username===null){
-				console.log('aaa');
-			}
 			return node.value.username;
 		}
 	});
-	 console.log(res);
+//	 console.log(res);
 	var testResult = res.toString() === [ 'john', 'andy', 'anna', 'gaby', null ]
 			.toString();
 	return testResult;
 };
 
 function test2() {
-	var res = JsonEasyFilter(json).get('departments.admin').filter(
+	var res = jef(json).get('departments.admin').filter(
 			function(node) {
 				if (node.value.manager === 'john') {
 					return node.value.manager;
@@ -90,7 +86,7 @@ function test2() {
  * All employee usernames with a salary over 200.
  */
 function test3() {
-	var res = JsonEasyFilter(json).filter(function(node) {
+	var res = jef(json).filter(function(node) {
 		if (node.has('salary') && node.value.salary > 200) {
 			return node.value.username + ' ' + node.value.salary;
 		}
@@ -110,15 +106,5 @@ function runTests() {
 }
 
 console.log('start');
- test1();
-// runTests();
-
-//var x = [1, 2];
-//x.push(null);
-//console.log(x);
-
-//var res = JsonEasyFilter(json).get('employees').filter(function(node) {
-//	console.log(node.key+' '+node.value);
-//});
-//
-//console.log(res);
+// test1();
+ runTests();
