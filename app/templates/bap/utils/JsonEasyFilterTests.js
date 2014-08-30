@@ -57,32 +57,33 @@ var json = {
  * Get all employee username with a salary over 200.
  */
 function test1() {
-	var res = JsonEasyFilter.filter(json, function(node) {
+	var res = JsonEasyFilter(json).filter(function(node) {
 		if (node.hasOwnProperty('username')) {
 			return node.value.username;
 		}
 	});
-	console.log(res);
+	var testResult = res.toString() === [ 'john', 'andy', 'anna', 'gaby' ].toString();
+	return testResult;
 };
 
+function test2() {
+	var res = JsonEasyFilter(json).get('departments.admin').filter(
+			function(node) {
+				if (node.value.manager === 'john') {
+					return node.value.manager;
+				}
+			});
+	var testResult = res.toString() === [ 'john' ].toString();
+	return testResult;
+}
+
+function runTests(){
+	var res = test1();
+	console.log('Test1: ' + res);
+	var res = test2();
+	console.log('Test2: ' + res);
+}
+
+console.log('start');
 //test1();
-
-var x = JsonEasyFilter.root(json);
-console.log(x.value);
-
-
-// JsonEasyFilter.filter(json, function(node) {
-// console.log(node.path + ' ' + node.key);
-// });
-
-//console.log(json.employees[4].hasOwnProperty('username'));
-//var res = JsonEasyFilter.filter(json, function(node) {
-//	if (node.hasOwnProperty('username')) {
-//		return node.value.username;
-//	}
-//});
-//console.log(res);
-//var a = ['a', 'b', 'c'];
-//console.log(a.slice(0, a.length-1));
-
-
+runTests();
