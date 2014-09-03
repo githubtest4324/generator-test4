@@ -6,6 +6,7 @@ var internalJsType = {
 	FUNCTION: 'function',
 	UNDEFINED:'undefined',
 	NUMBER:'number',
+	NULL:'null',
 	/**
 	 * Returns the javascript type of an object.
 	 * @param obj
