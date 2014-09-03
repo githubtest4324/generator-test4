@@ -18,7 +18,7 @@ module.exports = function BapCompilationResult() {
         return JSON.stringify(this.compiled, function(key, value){
         	if(key=='$parent'){
         	    if(value){
-            		if(value.has('toString')){
+            		if(value.hasProp('toString')){
             			return value.toString();
             		} else{
             		    return 'Circular reference'

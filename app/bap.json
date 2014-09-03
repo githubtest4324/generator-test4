@@ -2,7 +2,7 @@
     "ecom": {
         "customers": {
             "Customer": {
-                "type": "entity1",
+                "type": "entity",
                 "properties": {
                     "code": "str"
                 }

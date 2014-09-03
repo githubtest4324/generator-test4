@@ -16,7 +16,7 @@ var internalJsType = {
 	},
 	
 	installPrototypeHas: function(){
-		Object.defineProperty(Object.prototype, 'has', {
+		Object.defineProperty(Object.prototype, 'hasProp', {
 			enumerable: false,
 			value: function (property) {
 				return (this.hasOwnProperty(property));

@@ -5,6 +5,6 @@ module.exports = function BapError(pathParam, messageParam){
     this.message = messageParam || '';
     this.path = pathParam || [];
     this.toString = function(){
-        return 'Error at '+JsonUtils.pathToString(this.path)+': '+this.message;
+        return 'Error at '+this.path+': '+this.message;
     };
 };

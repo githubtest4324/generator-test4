@@ -11,6 +11,7 @@ var sourceRoot = "./templates";
 var bapFile = process.argv[2];
 
 var BapCompiler = require(sourceRoot + '/bap/BapCompiler');
+require(sourceRoot + '/bap/typeCompilers/NamespaceCompiler')
 
 var bap = fs.readFileSync(bapFile, 'utf-8');
 var compiler = new BapCompiler(bap);
