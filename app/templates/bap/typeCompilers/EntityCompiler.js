@@ -1,6 +1,7 @@
 var Entity = require('../types/Entity');
 var EntityProperty = require('../types/EntityProperty');
 var JsType = require('../utils/JsType');
+var BapError = require('../BapError');
 
 module.exports = {
 	type: 'entity',
@@ -48,7 +49,42 @@ module.exports = {
 		};
 	
 		this._validate = function (srcNode) {
-			// todo: all ancestors must be namespaces.
+			var output = this.compiler.result.output;
+			var valid = true;
+			// Type is mandatory
+			if(!srcNode.has('type')){
+				output.push(new BapError(srcNode.path, "'type' is missing"));
+				valid = false;
+			} else if(srcNode.get('type').getType()!==JsType.STRING){
+				output.push(new BapError(srcNode.path, "Invalid type '{0}'. Only strings allowed.".format(srcNode.get('type').getType())));
+				valid = false;
+			}
+
+			// Name is mandatory
+			if(!srcNode.has('name')){
+				output.push(new BapError(srcNode.path, "'name' is missing"));
+				valid = false;
+			} else if(srcNode.get('name').getType()!==JsType.STRING){
+				output.push(new BapError(srcNode.path, "Invalid type '{0}'. Only strings allowed.".format(srcNode.get('name').getType())));
+				valid = false;
+			}
+
+			// Properties is mandatory
+			if(!srcNode.has('properties')){
+				output.push(new BapError(srcNode.path, "'type' is missing"));
+				valid = false;
+			} else if(srcNode.get('properties').getType()!==JsType.OBJECT){
+				output.push(new BapError(srcNode.path, "Invalid type '{0}'. Only objects allowed.".format(srcNode.get('properties').getType())));
+				valid = false;
+			} else{
+				// Validate each property
+				srcNode.get('properties').validate(){
+					TODO
+				}
+				
+			}
+
+			return valid;
 		};
 	
 	}
