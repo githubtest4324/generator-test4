@@ -1,7 +1,6 @@
 var Namespace = require('../types/Namespace');
 var BapError = require('../BapError');
 var JsType = require('../utils/JsType.js');
-var JsonEasyFilter = require('../utils/JsonEasyFilter');
 var EntityCompiler = require('../typeCompilers/EntityCompiler.js');
 
 module.exports ={
@@ -10,8 +9,10 @@ module.exports ={
 		this.type = 'namespace';
 		this.compiler = compilerParam;
 	
-		this.compile = function(sourcePath, name, value, parent){
-			if(!this._validate(sourcePath, name, value, parent)){
+		this.compile = function(srcNode, parent){
+			var name = srcNode.key;
+			var value = srcNode.value;
+			if(!this._validate(srcNode, parent)){
 				return;
 			}
 			
@@ -20,7 +21,7 @@ module.exports ={
 			parent[name] = res;
 			res.$name = name;
 			res.$parent = parent;
-			if(parent.has('$type') && parent.$type===this.type){
+			if(parent.hasProp('$type') && parent.$type===this.type){
 				// Has namespace parent
 				res.$namespace = "{0}.{1}".format(parent.$namespace, name);
 			} else{
@@ -31,21 +32,21 @@ module.exports ={
 			// Compile children
 			for(var childName in value){
 				var child = value[childName];
-				if (!value[childName].has('type')) {
+				if (!value[childName].hasProp('type')) {
 					// Namespace
-					this.compile(sourcePath.concat([childName]), childName, child, res);
+					this.compile(srcNode.get(childName), res);
 				} else{
 					// Other element
 					var compiler = this.compiler.compilers[child.type];
-					compiler.compile(sourcePath.concat([childName]), childName, child, res);
+					compiler.compile(srcNode.get(childName), res);
 				}			
 			}
 		};
 	
-		this._validate = function (sourcePath, name, value, parent) {
+		this._validate = function (srcNode, parent) {
 			var res = true;
 			
-			if(!this._allowedTypes(sourcePath, value)){
+			if(!this._allowedTypes(srcNode)){
 				res = false;
 			}
 			
@@ -55,23 +56,23 @@ module.exports ={
 		/**
 		 * Returns true if this namespace contains only properties with 'entity', 'page', 'webService' or no types (other namespaces).
 		 */
-		this._allowedTypes = function(sourcePath, namespace){
-			var isAllowed = true;
-			// console.log(this.compiler.result);
+		this._allowedTypes = function(srcNode){
 			var output = this.compiler.result.output;
-			JsonEasyFilter.filter(namespace, function(node){
-				if(node.level==1){
-					if(node.value.typeOf()!==JsType.OBJECT){
-						isAllowed = false;
-						output.push(new BapError(sourcePath.concat(node.path), "Only objects allowed as top level elements.".format(node.value.type)));
-					} else 	if(! (!node.value.type || node.value.type===EntityCompiler.type)){
-						isAllowed = false;
-						output.push(new BapError(sourcePath.concat(node.path), "Type '{0}' not allowed for a top level element.".format(node.value.type)));
+			var res = srcNode.validate(function(node, local){
+				var valid = true;
+				if(local.level==1){
+					if(node.getType()!==JsType.OBJECT){
+						valid = false;
+						output.push(new BapError(node.path, "Only objects allowed as namespace elements. Type is: {0}".format(node.getType())));
+					} else 	if(! (!node.has('type') || node.value.type===EntityCompiler.type)){
+						valid = false;
+						output.push(new BapError(node.path, "Type '{0}' not allowed for a top level element.".format(node.value.type)));
 					}
 				}
+				return valid;
 			});
 	
-			return isAllowed;
+			return res;
 		};
 
 	}

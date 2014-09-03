@@ -1,4 +1,4 @@
-var jef = require('./JsonEasyFilter');
+var jef = require('json-easy-filter');
 
 var json = {
 	departments : {

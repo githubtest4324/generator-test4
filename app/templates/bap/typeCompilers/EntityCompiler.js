@@ -7,8 +7,10 @@ module.exports = {
 	compiler: function(compilerParam){
 		this.type = 'entity';
 		this.compiler = compilerParam;
-		this.compile = function(sourcePath, name, value, parent){
-			this._validate(sourcePath, name, value, parent);
+		this.compile = function(srcNode, parent){
+			var name = srcNode.key;
+			var value = srcNode.value;
+			this._validate(srcNode, parent);
 			
 			var res = new Entity();
 			parent[name] = res;
@@ -29,13 +31,13 @@ module.exports = {
 				} else{
 					// Expanded property
 					property.$type = propSrc.type;
-					if(propSrc.has('translate')){
+					if(propSrc.hasProp('translate')){
 						property.$translate = propSrc.translate;
 					}
-					if(propSrc.has('itemType')){
+					if(propSrc.hasProp('itemType')){
 						property.$itemType = propSrc.itemType;
 					}
-					if(propSrc.has('translate')){
+					if(propSrc.hasProp('translate')){
 						property.$translate = propSrc.translate;
 					} else{
 						property.$translate = propSrcName;
@@ -45,7 +47,7 @@ module.exports = {
 			
 		};
 	
-		this._validate = function (source, path, element, compiler) {
+		this._validate = function (srcNode) {
 			// todo: all ancestors must be namespaces.
 		};
 	
