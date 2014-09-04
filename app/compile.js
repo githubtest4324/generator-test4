@@ -1,17 +1,11 @@
 var fs = require('fs');
-var vm = require('vm');
-
-function include(path) {
-	var code = fs.readFileSync(path, 'utf-8');
-	vm.runInThisContext(code, path);
-}
 
 var sourceRoot = "./templates";
 
-var bapFile = process.argv[2];
+var bapFile = 'bap.json';
 
 var BapCompiler = require(sourceRoot + '/bap/BapCompiler');
-require(sourceRoot + '/bap/typeCompilers/NamespaceCompiler')
+require(sourceRoot + '/bap/typeCompilers/NamespaceCompiler');
 
 var bap = fs.readFileSync(bapFile, 'utf-8');
 var compiler = new BapCompiler(bap);
@@ -20,10 +14,8 @@ var result = compiler.compile();
 console.log(result.toString());
 
 if (result.output.length > 0) {
-	result.output.forEach(function(val){
+	result.output.forEach(function (val) {
+		'use strict';
 		console.log(val.toString());
 	});
 }
-
-
-

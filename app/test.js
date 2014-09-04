@@ -1,11 +1,6 @@
 
 
-var x = {
-	a: {
-		b: 'c'
-	},
-	x: this
-};
+var x = ['a', 'b'];
 
 
-console.log(x);
+console.log(x.indexOf('b')>=0);

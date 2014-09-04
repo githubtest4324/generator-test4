@@ -4,90 +4,110 @@ var JsType = require('../utils/JsType');
 var BapError = require('../BapError');
 
 module.exports = {
-	type: 'entity',
-	compiler: function(compilerParam){
+	type : 'entity',
+	compiler : function (compilerParam) {
+		'use strict';
 		this.type = 'entity';
 		this.compiler = compilerParam;
-		this.compile = function(srcNode, parent){
+		this.compile = function (srcNode, parent) {
 			var name = srcNode.key;
 			var value = srcNode.value;
 			this._validate(srcNode, parent);
-			
+
 			var res = new Entity();
 			parent[name] = res;
 			res.$name = name;
 			res.$parent = parent;
-			
+
 			// Add properties
-			for(var propSrcName in value.properties){
+			for ( var propSrcName in value.properties) {
 				var propSrc = value.properties[propSrcName];
 				var property = new EntityProperty();
 				res[propSrcName] = property;
 				property.$name = propSrcName;
-				
-				if(propSrc.typeOf()===JsType.STRING){
+
+				if (propSrc.typeOf() === JsType.STRING) {
 					// Inline property
 					property.$type = propSrc;
 					property.$translate = propSrcName;
-				} else{
+				} else {
 					// Expanded property
 					property.$type = propSrc.type;
-					if(propSrc.hasProp('translate')){
+					if (propSrc.hasProp('translate')) {
 						property.$translate = propSrc.translate;
 					}
-					if(propSrc.hasProp('itemType')){
+					if (propSrc.hasProp('itemType')) {
 						property.$itemType = propSrc.itemType;
 					}
-					if(propSrc.hasProp('translate')){
+					if (propSrc.hasProp('translate')) {
 						property.$translate = propSrc.translate;
-					} else{
+					} else {
 						property.$translate = propSrcName;
 					}
 				}
 			}
-			
+
 		};
-	
+
 		this._validate = function (srcNode) {
 			var output = this.compiler.result.output;
 			var valid = true;
-			// Type is mandatory
-			if(!srcNode.has('type')){
-				output.push(new BapError(srcNode.path, "'type' is missing"));
-				valid = false;
-			} else if(srcNode.get('type').getType()!==JsType.STRING){
-				output.push(new BapError(srcNode.path, "Invalid type '{0}'. Only strings allowed.".format(srcNode.get('type').getType())));
-				valid = false;
-			}
-
-			// Name is mandatory
-			if(!srcNode.has('name')){
-				output.push(new BapError(srcNode.path, "'name' is missing"));
-				valid = false;
-			} else if(srcNode.get('name').getType()!==JsType.STRING){
-				output.push(new BapError(srcNode.path, "Invalid type '{0}'. Only strings allowed.".format(srcNode.get('name').getType())));
-				valid = false;
-			}
 
 			// Properties is mandatory
-			if(!srcNode.has('properties')){
+			if (!srcNode.has('properties')) {
 				output.push(new BapError(srcNode.path, "'type' is missing"));
 				valid = false;
-			} else if(srcNode.get('properties').getType()!==JsType.OBJECT){
-				output.push(new BapError(srcNode.path, "Invalid type '{0}'. Only objects allowed.".format(srcNode.get('properties').getType())));
+			} else if (srcNode.get('properties').getType() !== JsType.OBJECT) {
+				output.push(new BapError(srcNode.path, "Invalid entity properties."));
 				valid = false;
-			} else{
+			} else {
 				// Validate each property
-				srcNode.get('properties').validate(){
-					TODO
-				}
-				
+				srcNode.get('properties').validate(function (node, local) {
+					if (local.level === 1) {
+						if (node.isLeaf) {
+							if (node.getType() !== JsType.STRING) {
+								output.push(new BapError(node.path, "Invalid field type."));
+								valid = false;
+							}
+						} else {
+							if (!node.has('type')) {
+								output.push(new BapError(node.path, "Field does not have a type."));
+								valid = false;
+							}
+						}
+					}
+				});
+
 			}
 
 			return valid;
 		};
-	
+		
+		this._resolveFieldTypes = function () {
+			// todo: will be called in a later stage and will decide if field
+			// types are correct (either a main type or another entity).
+			// srcNode.get('properties').validate(function(node, local){
+			// if(local.level===1){
+			// if(node.isLeaf){
+			// if(this._allowedFieldTypes().indexOf(node.value)>=0){
+			// output.push(new BapError(node.path, "Only {0} allowed as
+			// types.".format(this._allowedFieldTypes()));
+			// valid = false;
+			// }
+			// }
+			// if(!(node.getType()===JsType.STRING ||
+			// node.getType()===JsType.OBJECT)){
+			// output.push(new BapError(node.path, "Invalid type '{0}'. Only
+			// object or string is allowed as field
+			// definition.".format(srcNode.get('properties').getType())));
+			// valid = false;
+			// }
+			// if(node.getType===JsType.OBJECT){
+			//						
+			// }
+			// }
+			// );
+		};
 	}
-	
-};
 
+};

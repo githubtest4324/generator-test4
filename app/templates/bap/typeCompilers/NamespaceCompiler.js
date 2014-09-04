@@ -3,78 +3,80 @@ var BapError = require('../BapError');
 var JsType = require('../utils/JsType.js');
 var EntityCompiler = require('../typeCompilers/EntityCompiler.js');
 
-module.exports ={
-	type: 'namespace',
-	compiler: function (compilerParam){
+module.exports = {
+	type : 'namespace',
+	compiler : function (compilerParam) {
+		'use strict';
 		this.type = 'namespace';
 		this.compiler = compilerParam;
-	
-		this.compile = function(srcNode, parent){
+
+		this.compile = function (srcNode, parent) {
 			var name = srcNode.key;
 			var value = srcNode.value;
-			if(!this._validate(srcNode, parent)){
+			if (!this._validate(srcNode, parent)) {
 				return;
 			}
-			
+
 			// Build namespace element
 			var res = new Namespace();
 			parent[name] = res;
 			res.$name = name;
 			res.$parent = parent;
-			if(parent.hasProp('$type') && parent.$type===this.type){
+			if (parent.hasProp('$type') && parent.$type === this.type) {
 				// Has namespace parent
 				res.$namespace = "{0}.{1}".format(parent.$namespace, name);
-			} else{
+			} else {
 				// Has root parent
 				res.$namespace = name;
 			}
-	
+
 			// Compile children
-			for(var childName in value){
+			for ( var childName in value) {
 				var child = value[childName];
 				if (!value[childName].hasProp('type')) {
 					// Namespace
 					this.compile(srcNode.get(childName), res);
-				} else{
+				} else {
 					// Other element
 					var compiler = this.compiler.compilers[child.type];
 					compiler.compile(srcNode.get(childName), res);
-				}			
+				}
 			}
 		};
-	
-		this._validate = function (srcNode, parent) {
+
+		this._validate = function (srcNode) {
 			var res = true;
-			
-			if(!this._allowedTypes(srcNode)){
+
+			if (!this._allowedTypes(srcNode)) {
 				res = false;
 			}
-			
+
 			return res;
 		};
-		
+
 		/**
-		 * Returns true if this namespace contains only properties with 'entity', 'page', 'webService' or no types (other namespaces).
+		 * Returns true if this namespace contains only properties with
+		 * 'entity', 'page', 'webService' or no types (other namespaces).
 		 */
-		this._allowedTypes = function(srcNode){
+		this._allowedTypes = function (srcNode) {
 			var output = this.compiler.result.output;
-			var res = srcNode.validate(function(node, local){
+			var res = srcNode.validate(function (node, local) {
 				var valid = true;
-				if(local.level==1){
-					if(node.getType()!==JsType.OBJECT){
+				if (local.level === 1) {
+					if (node.getType() !== JsType.OBJECT) {
 						valid = false;
 						output.push(new BapError(node.path, "Only objects allowed as namespace elements. Type is: {0}".format(node.getType())));
-					} else 	if(! (!node.has('type') || node.value.type===EntityCompiler.type)){
+					} else if (!(!node.has('type') || node.value.type === EntityCompiler.type)) {
 						valid = false;
-						output.push(new BapError(node.path, "Type '{0}' not allowed for a top level element.".format(node.value.type)));
+						output.push(new BapError(node.path, "Invalid type."));
 					}
 				}
 				return valid;
 			});
-	
+
 			return res;
 		};
 
 	}
 
-}
+};
