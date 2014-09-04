@@ -55,7 +55,7 @@ module.exports = {
 
 			// Properties is mandatory
 			if (!srcNode.has('properties')) {
-				output.push(new BapError(srcNode.path, "'type' is missing"));
+				output.push(new BapError(srcNode.path, "Entity is missing 'properties'"));
 				valid = false;
 			} else if (srcNode.get('properties').getType() !== JsType.OBJECT) {
 				output.push(new BapError(srcNode.path, "Invalid entity properties."));

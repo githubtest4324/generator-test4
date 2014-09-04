@@ -1,18 +1,15 @@
 module.exports = {
-    
-    installPrototypeFormat: function(){
-        if (!String.prototype.format) {
-          String.prototype.format = function() {
-            var args = arguments;
-            return this.replace(/{(\d+)}/g, function(match, number) { 
-              return typeof args[number] != 'undefined'
-                ? args[number]
-                : match
-              ;
-            });
-          };
-        }        
-    }    
-    
-    
+
+	installPrototypeFormat : function () {
+		'use strict';
+		if (!String.prototype.format) {
+			String.prototype.format = function () {
+				var args = arguments;
+				return this.replace(/{(\d+)}/g, function (match, number) {
+					return typeof args[number] !== 'undefined' ? args[number] : match;
+				});
+			};
+		}
+	}
+
 };

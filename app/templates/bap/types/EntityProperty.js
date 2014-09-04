@@ -1,4 +1,5 @@
 module.exports = function(){
+	'use strict';
 	/**
 	 * Any of obj, str, date, bool, num, list, entity
 	 */
@@ -28,4 +29,4 @@ module.exports = function(){
 	 */
 	this.$computed = false;
 
-}
+};

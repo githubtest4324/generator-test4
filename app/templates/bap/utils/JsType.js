@@ -1,33 +1,36 @@
-
 var internalJsType = {
-	STRING: 'string',
-	ARRAY: 'array',
-	OBJECT: 'object',
-	FUNCTION: 'function',
-	UNDEFINED:'undefined',
-	NUMBER:'number',
-	NULL:'null',
+	STRING : 'string',
+	ARRAY : 'array',
+	OBJECT : 'object',
+	FUNCTION : 'function',
+	UNDEFINED : 'undefined',
+	NUMBER : 'number',
+	NULL : 'null',
 	/**
 	 * Returns the javascript type of an object.
+	 * 
 	 * @param obj
 	 * @returns {string}
 	 */
-	get: function (obj) {
+	get : function (obj) {
+		'use strict';
 		return ({}).toString.call(obj).match(/\s([a-zA-Z]+)/)[1].toLowerCase();
 	},
-	
-	installPrototypeHas: function(){
+
+	installPrototypeHas : function () {
+		'use strict';
 		Object.defineProperty(Object.prototype, 'hasProp', {
-			enumerable: false,
-			value: function (property) {
+			enumerable : false,
+			value : function (property) {
 				return (this.hasOwnProperty(property));
 			}
 		});
 	},
-	installPrototypeTypeOf: function(){
+	installPrototypeTypeOf : function () {
+		'use strict';
 		Object.defineProperty(Object.prototype, 'typeOf', {
-			enumerable: false,
-			value: function (property) {
+			enumerable : false,
+			value : function () {
 				return internalJsType.get(this);
 			}
 		});

@@ -65,7 +65,7 @@ module.exports = {
 				if (local.level === 1) {
 					if (node.getType() !== JsType.OBJECT) {
 						valid = false;
-						output.push(new BapError(node.path, "Only objects allowed as namespace elements. Type is: {0}".format(node.getType())));
+						output.push(new BapError(node.path, "Only complex objects allowed as namespace elements."));
 					} else if (!(!node.has('type') || node.value.type === EntityCompiler.type)) {
 						valid = false;
 						output.push(new BapError(node.path, "Invalid type."));

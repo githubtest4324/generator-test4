@@ -2,7 +2,7 @@ var fs = require('fs');
 
 var sourceRoot = "./templates";
 
-var bapFile = 'bap.json';
+var bapFile = 'bap2.json';
 
 var BapCompiler = require(sourceRoot + '/bap/BapCompiler');
 require(sourceRoot + '/bap/typeCompilers/NamespaceCompiler');

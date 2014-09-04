@@ -1,4 +1,4 @@
-
+var travers = require('traverse');
 
 var x = ['a', 'b'];
 
