@@ -11,14 +11,14 @@ jsType.installPrototypeHas();
 jsType.installPrototypeTypeOf();
 stringUtils.installPrototypeFormat();
 
-module.exports = function (source) {
+module.exports = function (sources) {
 	'use strict';
 
 	// ///////////////////////////////
 	// Private properties
 	// ///////////////////////////////
 	this._logger = console;
-	this._source = JSON.parse(source);
+	this._sources = sources;
 	this._factories = {};
 
 	this.setLogger = function (logger) {
@@ -32,11 +32,17 @@ module.exports = function (source) {
 	 */
 	this.compile = function () {
 		var result = new BapCompilationResult();
-		if (this._source === null) {
-			result.output.push(new BapError("Source json is not specified.", null));
-		}
-		var compiler = new Compiler(this._source, result, this._factories, this._logger);
-		compiler.compile();
+		
+		var that = this;
+		this._sources.forEach(function(sourceStr){
+			if (sourceStr === null) {
+				result.output.push(new BapError("Source json is not specified.", null));
+			} else{
+				var source = JSON.parse(sourceStr);
+				var compiler = new Compiler(source, result, that._factories, that._logger);
+				compiler.compile();
+			}
+		});
 		return result;
 	};
 

@@ -2,13 +2,13 @@ var fs = require('fs');
 
 var sourceRoot = "./templates";
 
-var bapFile = 'bap2.json';
 
 var BapCompiler = require(sourceRoot + '/bap/BapCompiler');
 require(sourceRoot + '/bap/typeCompilers/NamespaceCompiler');
 
-var bap = fs.readFileSync(bapFile, 'utf-8');
-var compiler = new BapCompiler(bap);
+var bap1 = fs.readFileSync('bap1.json', 'utf-8');
+var bap2 = fs.readFileSync('bap2.json', 'utf-8');
+var compiler = new BapCompiler([bap1]);
 var result = compiler.compile();
 
 console.log(result.toString());
