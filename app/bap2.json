@@ -27,5 +27,17 @@
     			"field1": "string"
     		}
     	}
+    },
+    "Request2": {
+        "type": "entity",
+        "properties": {
+            "name": "str",
+            "code": {
+                "type": "str",
+                "translate": "code2"
+            },
+            "customer": "Customer"
+        }
     }
+    
 }

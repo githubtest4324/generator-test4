@@ -8,7 +8,7 @@ require(sourceRoot + '/bap/typeCompilers/NamespaceCompiler');
 
 var bap1 = fs.readFileSync('bap1.json', 'utf-8');
 var bap2 = fs.readFileSync('bap2.json', 'utf-8');
-var compiler = new BapCompiler([bap1]);
+var compiler = new BapCompiler([bap1, bap2]);
 var result = compiler.compile();
 
 console.log(result.toString());

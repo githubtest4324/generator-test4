@@ -24,11 +24,16 @@ module.exports = function Compiler (sourceParam, resultParam, loggerParam) {
 	 *            List of type compilers
 	 */
 	this.compile = function () {
-		var defaultNamespace = new Namespace();
-		defaultNamespace.$isDefault = true;
-		defaultNamespace.$namespace = '';
-		defaultNamespace.$name = '';
-		defaultNamespace.$parent = this.result.compiled;
+		var defaultNamespace;
+		if(this.result.compiled.defaultNamespace){
+			defaultNamespace = this.result.compiled.defaultNamespace
+		} else{
+			defaultNamespace = new Namespace();
+			defaultNamespace.$isDefault = true;
+			defaultNamespace.$namespace = '';
+			defaultNamespace.$name = '';
+			defaultNamespace.$parent = this.result.compiled;
+		}
 
 		// Build default list of compilers
 		this.compilers[NamespaceCompiler.type] = new NamespaceCompiler.compiler(this);

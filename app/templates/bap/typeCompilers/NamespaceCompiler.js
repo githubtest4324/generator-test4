@@ -17,17 +17,22 @@ module.exports = {
 				return;
 			}
 
-			// Build namespace element
-			var res = new Namespace();
-			parent[name] = res;
-			res.$name = name;
-			res.$parent = parent;
-			if (parent.hasProp('$type') && parent.$type === this.type) {
-				// Has namespace parent
-				res.$namespace = "{0}.{1}".format(parent.$namespace, name);
-			} else {
-				// Has root parent
-				res.$namespace = name;
+			var res;
+			if(parent[name]){
+				res = parent[name];
+			} else{
+				// Build namespace element
+				res = new Namespace();
+				parent[name] = res;
+				res.$name = name;
+				res.$parent = parent;
+				if (parent.hasProp('$type') && parent.$type === this.type) {
+					// Has namespace parent
+					res.$namespace = "{0}.{1}".format(parent.$namespace, name);
+				} else {
+					// Has root parent
+					res.$namespace = name;
+				}
 			}
 
 			// Compile children

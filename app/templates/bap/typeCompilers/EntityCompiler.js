@@ -49,10 +49,16 @@ module.exports = {
 
 		};
 
-		this._validate = function (srcNode) {
+		this._validate = function (srcNode, parent) {
 			var output = this.compiler.result.output;
 			var valid = true;
 
+			var name = srcNode.key;
+			if(parent[name]){
+				output.push(new BapError(srcNode.path, "Duplicated entity."));
+				valid = false;
+			}
+			
 			// Properties is mandatory
 			if (!srcNode.has('properties')) {
 				output.push(new BapError(srcNode.path, "Entity is missing 'properties'"));
