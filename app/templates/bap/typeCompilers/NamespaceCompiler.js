@@ -70,10 +70,10 @@ module.exports = {
 				if (local.level === 1) {
 					if (node.getType() !== JsType.OBJECT) {
 						valid = false;
-						output.push(new BapError(node.path, "Only complex objects allowed as namespace elements."));
+						output.push(new BapError('E8695', node.path, "Only complex objects allowed as namespace elements."));
 					} else if (!(!node.has('type') || node.value.type === EntityCompiler.type)) {
 						valid = false;
-						output.push(new BapError(node.path, "Invalid type."));
+						output.push(new BapError('E3187', node.path, "Invalid type."));
 					}
 				}
 				return valid;

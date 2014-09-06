@@ -56,7 +56,7 @@ module.exports = function Compiler (sourceParam, resultParam, loggerParam) {
 					factory.compile(this.jefSrc.get(name), defaultNamespace);
 					usesDefaultNamespace = true;
 				} else {
-					this.result.output.push(new BapError(name, 'Unknown type "{0}"'.format(this.source[name].type)));
+					this.result.output.push(new BapError('E8472',name, 'Unknown type "{0}"'.format(this.source[name].type)));
 				}
 			}
 		}
@@ -72,19 +72,19 @@ module.exports = function Compiler (sourceParam, resultParam, loggerParam) {
 		var output = this.result.output;
 
 		if (!root) {
-			output.push(new BapError([], 'No content was received to be compiled'));
+			output.push(new BapError('E4632', '', 'No content was received to be compiled'));
 			res = false;
 		}
 
 		// Must be an object
 		if (root.typeOf() !== JsType.OBJECT) {
-			output.push(new BapError([], 'Received source content must be a complex json object. The one received is of type "{0}"'.format(root.typeOf())));
+			output.push(new BapError('E5398', '', 'Received source content must be a complex json object. The one received is of type "{0}"'.format(root.typeOf())));
 			res = false;
 		}
 
 		// 'type' not allowed as root element.
 		if (root.hasProp('type')) {
-			output.push(new BapError([], '"type" is not allowed as top level element'));
+			output.push(new BapError('E02943', '', '"type" is not allowed as top level element'));
 			res = false;
 		}
 		// Root must contain only properties with 'entity', 'page', 'webService'
@@ -94,10 +94,10 @@ module.exports = function Compiler (sourceParam, resultParam, loggerParam) {
 			if (node.level === 1) {
 				if (node.getType() !== JsType.OBJECT) {
 					valid = false;
-					output.push(new BapError(node.path, "Only objects allowed as top level elements.".format(node.value.type)));
+					output.push(new BapError('E3285', node.path, "Only objects allowed as top level elements.".format(node.value.type)));
 				} else if (!(!node.value.type || node.value.type === EntityCompiler.type)) {
 					valid = false;
-					output.push(new BapError(node.path, "Type '{0}' not allowed for a top level element.".format(node.value.type)));
+					output.push(new BapError('E5295', node.path, "Type '{0}' not allowed for a top level element.".format(node.value.type)));
 				}
 			}
 			return valid;

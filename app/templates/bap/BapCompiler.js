@@ -36,7 +36,7 @@ module.exports = function (sources) {
 		var that = this;
 		this._sources.forEach(function(sourceStr){
 			if (sourceStr === null) {
-				result.output.push(new BapError("Source json is not specified.", null));
+				result.output.push(new BapError('E6548', '', "Source json is not specified."));
 			} else{
 				var source = JSON.parse(sourceStr);
 				var compiler = new Compiler(source, result, that._factories, that._logger);

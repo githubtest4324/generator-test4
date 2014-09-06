@@ -55,16 +55,16 @@ module.exports = {
 
 			var name = srcNode.key;
 			if(parent[name]){
-				output.push(new BapError(srcNode.path, "Duplicated entity."));
+				output.push(new BapError('E9738', srcNode.path, "Duplicated entity."));
 				valid = false;
 			}
 			
 			// Properties is mandatory
 			if (!srcNode.has('properties')) {
-				output.push(new BapError(srcNode.path, "Entity is missing 'properties'"));
+				output.push(new BapError('E7784', srcNode.path, "Entity is missing 'properties'"));
 				valid = false;
 			} else if (srcNode.get('properties').getType() !== JsType.OBJECT) {
-				output.push(new BapError(srcNode.path, "Invalid entity properties."));
+				output.push(new BapError('E4085', srcNode.path, "Invalid entity properties."));
 				valid = false;
 			} else {
 				// Validate each property
@@ -72,12 +72,12 @@ module.exports = {
 					if (local.level === 1) {
 						if (node.isLeaf) {
 							if (node.getType() !== JsType.STRING) {
-								output.push(new BapError(node.path, "Invalid field type."));
+								output.push(new BapError('E3238', node.path, "Invalid field type."));
 								valid = false;
 							}
 						} else {
 							if (!node.has('type')) {
-								output.push(new BapError(node.path, "Field does not have a type."));
+								output.push(new BapError('E9947', node.path, "Field does not have a type."));
 								valid = false;
 							}
 						}
@@ -96,14 +96,14 @@ module.exports = {
 			// if(local.level===1){
 			// if(node.isLeaf){
 			// if(this._allowedFieldTypes().indexOf(node.value)>=0){
-			// output.push(new BapError(node.path, "Only {0} allowed as
+			// output.push(new BapError('E4389', node.path, "Only {0} allowed as
 			// types.".format(this._allowedFieldTypes()));
 			// valid = false;
 			// }
 			// }
 			// if(!(node.getType()===JsType.STRING ||
 			// node.getType()===JsType.OBJECT)){
-			// output.push(new BapError(node.path, "Invalid type '{0}'. Only
+			// output.push(new BapError('E7599', node.path, "Invalid type '{0}'. Only
 			// object or string is allowed as field
 			// definition.".format(srcNode.get('properties').getType())));
 			// valid = false;
