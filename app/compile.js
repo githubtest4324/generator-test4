@@ -5,6 +5,7 @@ var sourceRoot = "./templates";
 
 var BapCompiler = require(sourceRoot + '/bap/BapCompiler');
 require(sourceRoot + '/bap/typeCompilers/NamespaceCompiler');
+require(sourceRoot + '/bap/typeCompilers/EntityCompiler');
 
 var bap1 = fs.readFileSync('bap1.json', 'utf-8');
 var bap2 = fs.readFileSync('bap2.json', 'utf-8');
